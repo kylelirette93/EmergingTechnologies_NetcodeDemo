@@ -1,10 +1,11 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
 
 public class LocalPlayer : NetworkBehaviour
 {
     [SerializeField] float moveSpeed = 4f;
-    float horizontalInput, verticalInput;
+    Vector2 moveVector = Vector2.zero;
     Rigidbody rb;
 
     private void Start()
@@ -12,22 +13,14 @@ public class LocalPlayer : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    public void OnMove(InputValue value)
+    {
+        moveVector = value.Get<Vector2>();
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
-    }
-
-    private void FixedUpdate()
-    {
-        if (!IsOwner) return;
-        MovePlayer();
-    }
-
-    private void MovePlayer()
-    {
-        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput) * moveSpeed * Time.deltaTime;
-        rb.MovePosition(transform.position + movement);
+        transform.Translate(moveVector.x * Time.deltaTime * moveSpeed, 0, moveVector.y * Time.deltaTime * moveSpeed);
     }
 }
