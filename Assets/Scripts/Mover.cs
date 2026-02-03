@@ -21,10 +21,20 @@ public class Mover : NetworkBehaviour
         float moveVectorY = Input.GetAxis("Vertical");
 
         moveVector = new Vector3(moveVectorX * Time.fixedDeltaTime * moveSpeed, 0, moveVectorY * Time.fixedDeltaTime * moveSpeed);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Dash();
+        }
     }
 
     private void FixedUpdate()
     {
         rb.MovePosition(transform.position + moveVector);
+    }
+
+    private void Dash()
+    {
+        rb.AddForce(new Vector3(0, 0, 10f), ForceMode.Impulse);
     }
 }
