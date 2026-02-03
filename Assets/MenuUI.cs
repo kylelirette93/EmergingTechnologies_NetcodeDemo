@@ -15,6 +15,12 @@ public class MenuUI : MonoBehaviour
         HideUI();
     }
 
+    public void StartServer()
+    {
+        NetworkManager.Singleton.StartServer();
+        HideUI();
+    }
+
     public void HideUI()
     {
         gameObject.SetActive(false);

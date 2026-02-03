@@ -1,10 +1,13 @@
 using UnityEngine;
 using Unity.Netcode.Components;
-
-public class ClientNetworkTransform : NetworkTransform
+namespace Unity.Multiplayer.Samples.Utilities.ClientAuthority
 {
-    protected override bool OnIsServerAuthoritative()
+    [DisallowMultipleComponent]
+    public class ClientNetworkTransform : NetworkTransform
     {
-        return false;
+        protected override bool OnIsServerAuthoritative()
+        {
+            return false;
+        }
     }
 }
