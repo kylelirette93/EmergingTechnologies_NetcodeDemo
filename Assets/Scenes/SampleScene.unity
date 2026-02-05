@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 241407891}
   - component: {fileID: 241407893}
   - component: {fileID: 241407892}
+  - component: {fileID: 241407895}
   - component: {fileID: 241407894}
   m_Layer: 5
   m_Name: MenuPanel
@@ -292,6 +293,7 @@ RectTransform:
   - {fileID: 1186351487}
   - {fileID: 1214942607}
   - {fileID: 1390246838}
+  - {fileID: 1903352686}
   m_Father: {fileID: 594577952}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -349,6 +351,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c71694e9a5899458a21bf521a89ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  HostButton: {fileID: 1186351488}
+--- !u!114 &241407895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241407890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2217001710
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &291568421
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,8 +992,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 600123003}
-  - component: {fileID: 600123005}
   - component: {fileID: 600123004}
+  - component: {fileID: 600123005}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -1058,7 +1087,7 @@ MonoBehaviour:
     NetworkProfilingMetrics: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,7 +1421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1390246838
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1862,6 +1891,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1903352685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1903352686}
+  - component: {fileID: 1903352687}
+  m_Layer: 0
+  m_Name: MenuPanel-Child
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1903352686
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903352685}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -960, y: -1560.1938, z: 0}
+  m_LocalScale: {x: 3.101777, y: 3.101777, z: 3.101777}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 241407891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1903352687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903352685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa87489bfc51d448940c66c2a2cf840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  AutoDetach: 3
+  ComponentControllers: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
