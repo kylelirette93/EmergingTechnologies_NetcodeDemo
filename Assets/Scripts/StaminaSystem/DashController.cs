@@ -46,7 +46,7 @@ public class DashController : MonoBehaviour
             isDashing = true;
             currentStamina -= dashCost;
             staminaBar.UpdateStaminaUI(currentStamina, maxStamina);
-            rb.AddForce(new Vector3(0, 0, 10f), ForceMode.Impulse);
+            rb.AddForce(transform.forward * 15f, ForceMode.Impulse);
             currentStamina -= dashCost;
         }
         isDashing = false;
