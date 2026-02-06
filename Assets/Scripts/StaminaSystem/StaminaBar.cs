@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,28 +6,21 @@ using UnityEngine.UI;
 public class StaminaBar : MonoBehaviour
 {
     [SerializeField] private Image staminaBar;
-    Stamina stamina;
     [SerializeField] private TextMeshProUGUI staminaText;
 
-    private void Start()
-    {
-        stamina = new Stamina();
-        staminaBar.fillAmount = stamina.GetCurrentStamina() / stamina.GetMaxStamina();
-    }
-
-    private void UpdateStaminaUI()
+    public void UpdateStaminaUI(float currentStamina, float maxStamina)
     {
         if (staminaBar != null && staminaText != null)
         {
-            staminaBar.fillAmount = stamina.GetCurrentStamina() / stamina.GetMaxStamina();
+            staminaBar.fillAmount = currentStamina / maxStamina;
             staminaText.text = "Energy";
 
-            float staminaPercentage = stamina.GetCurrentStamina() / stamina.GetMaxStamina();
+            float staminaPercentage = currentStamina / maxStamina;
             Color startColor = Color.red;
             Color endColor = Color.green;
             Color currentColor = Color.Lerp(startColor, endColor, staminaPercentage);
 
-            
+            staminaText.DOColor(currentColor, 0.2f);        
         }
     }
 }

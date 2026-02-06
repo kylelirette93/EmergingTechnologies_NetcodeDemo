@@ -6,8 +6,6 @@ public class Stamina
 {
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float currentStamina;
-    [SerializeField] private float staminaCost = 30f;
-    [SerializeField] private float staminaRegenRate = 10f;
 
     public Stamina()
     {
