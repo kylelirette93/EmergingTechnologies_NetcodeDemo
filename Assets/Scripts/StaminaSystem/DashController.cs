@@ -1,6 +1,9 @@
+using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class DashController : MonoBehaviour
+public class DashController : NetworkBehaviour
 {
     Stamina stamina;
     StaminaBar staminaBar;
@@ -10,10 +13,12 @@ public class DashController : MonoBehaviour
     [SerializeField] private float staminaRegenRate = 30f;
     Rigidbody rb;
     bool isDashing = false;
+    CollisionHandler collisionHandler;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collisionHandler = GetComponent<CollisionHandler>();
         if (staminaBar == null)
         {
             staminaBar = FindFirstObjectByType<StaminaBar>();
@@ -31,8 +36,9 @@ public class DashController : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
+        {         
             isDashing = true;
             Dash();
         }
@@ -41,15 +47,29 @@ public class DashController : MonoBehaviour
     }
     public void Dash()
     {
+        //UnityEngine.Debug.Log($"[{(IsServer ? "HOST" : "CLIENT")}] Dash called. Current stamina: {currentStamina}");
         if (currentStamina >= dashCost)
         {
             isDashing = true;
+            if (collisionHandler != null)
+            {
+                collisionHandler.isDashing = true;
+            }
             currentStamina -= dashCost;
             staminaBar.UpdateStaminaUI(currentStamina, maxStamina);
-            rb.AddForce(transform.forward * 15f, ForceMode.Impulse);
-            currentStamina -= dashCost;
-        }
+            rb.AddForce(transform.forward * 20f, ForceMode.Impulse);
+            StartCoroutine(ResetDashFlag());
+        }     
+    }
+
+    private IEnumerator ResetDashFlag()
+    {
+        yield return new WaitForSeconds(0.3f);
         isDashing = false;
+        if (collisionHandler != null)
+        {
+            collisionHandler.isDashing = false;
+        }
     }
 
     void RegenerateStamina()

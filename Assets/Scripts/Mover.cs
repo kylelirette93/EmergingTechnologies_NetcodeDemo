@@ -1,40 +1,44 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class Mover : NetworkBehaviour
 {
+    private Vector2 inputVector;
     private Vector3 moveVector;
     private Rigidbody rb;
-    float moveSpeed = 60f;
+    float moveSpeed = 20f;
     float rotationSpeed = 120f;
+    public bool CanMove { get; set; } = true;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
+    public void OnMove(InputValue inputValue)
+    {
+        inputVector = inputValue.Get<Vector2>();
+    }
+
     void Update()
     {
         if (!IsOwner) return;
 
-        float moveVectorX = Input.GetAxis("Horizontal");
-        float moveVectorY = Input.GetAxis("Vertical");
+        float forwardInput = Mathf.Clamp(inputVector.y, -1f, 1f);
+        moveVector = transform.forward * forwardInput * moveSpeed;
 
-        float forwardInput = Mathf.Clamp01(moveVectorY);
-        moveVector = new Vector3(0, 0, forwardInput * Time.deltaTime * moveSpeed);
-
-        if (moveVectorX != 0)
+        if (inputVector.x != 0)
         {
-            float rotationAmount = moveVectorX * rotationSpeed * Time.deltaTime;
+            float rotationAmount = inputVector.x * rotationSpeed * Time.deltaTime;
             transform.Rotate(0, rotationAmount, 0);
         }
     }
 
     private void FixedUpdate()
     {
-        moveVector = Mathf.Clamp(moveVector.magnitude, 0, moveVector.magnitude) * transform.forward;
-        rb.MovePosition(transform.position + moveVector);
+        if (!IsOwner || !CanMove) return;
+
+        rb.MovePosition(rb.position + moveVector * Time.fixedDeltaTime);
     }
 }
