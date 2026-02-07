@@ -1,62 +1,29 @@
+using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuUI : NetworkBehaviour
+public class MenuUI : MonoBehaviour
 {
     [SerializeField] private Button HostButton;
-    private const string HOST_EXISTS_KEY = "HostExists";
+    [SerializeField] private Button JoinButton;
+    [SerializeField] private TMP_InputField joinCodeInput;
+    [SerializeField] Relay relay;
 
-    private void Start()
+    public void OnHostButtonClicked()
     {
-        UpdateButtonStates();
-
-        InvokeRepeating(nameof(UpdateButtonStates), 0.5f, 0.5f);
+        Debug.Log("Host button clicked.");
+        relay.StartHost();
     }
 
-    private void UpdateButtonStates()
+    public void OnJoinButtonClicked()
     {
-        bool hostExists = PlayerPrefs.GetInt(HOST_EXISTS_KEY, 0) == 1;
-        HostButton.interactable = !hostExists;
-    }
-    public void HostGame()
-    {
-        PlayerPrefs.SetInt(HOST_EXISTS_KEY, 1);
-        PlayerPrefs.Save();
-
-        NetworkManager.Singleton.StartHost();
-        UpdateButtonStates();
-        HideUI();
+        relay.JoinGame(joinCodeInput.text);
     }
 
-    public void JoinGame()
+    public void DisableUI()
     {
-        NetworkManager.Singleton.StartClient();
-        HideUI();
-    }
-
-    private void ClearPlayerPrefs()
-    {
-        PlayerPrefs.DeleteKey(HOST_EXISTS_KEY);
-        PlayerPrefs.Save();
-    }
-
-    public void HideUI()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public override void OnDestroy()
-    {
-        ClearPlayerPrefs();
-    }
-
-    void OnApplicationQuit()
-    {
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost)
-        {
-            ClearPlayerPrefs();
-        }
+        HostButton.enabled = false;
+        JoinButton.enabled = false;
     }
 }
