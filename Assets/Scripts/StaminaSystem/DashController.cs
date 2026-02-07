@@ -1,24 +1,27 @@
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class DashController : NetworkBehaviour
 {
+    [SerializeField] private float staminaRegenRate = 30f;
+    [SerializeField] private TrailRenderer dashTrail;
+
     Stamina stamina;
     StaminaBar staminaBar;
+    Rigidbody rb;
+    CollisionHandler collisionHandler;
+
     private float currentStamina;
     private float maxStamina;
     private float dashCost = 30f;
-    [SerializeField] private float staminaRegenRate = 30f;
-    Rigidbody rb;
-    bool isDashing = false;
-    CollisionHandler collisionHandler;
+    private bool isDashing = false;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collisionHandler = GetComponent<CollisionHandler>();
+
         if (staminaBar == null)
         {
             staminaBar = FindFirstObjectByType<StaminaBar>();
@@ -37,35 +40,57 @@ public class DashController : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
-        {         
-            isDashing = true;
-            Dash();
+        {
+            currentStamina -= dashCost;
+            staminaBar.UpdateStaminaUI(currentStamina, maxStamina);
+            DashServerRpc();
         }
+
         RegenerateStamina();
         staminaBar.UpdateStaminaUI(currentStamina, maxStamina);
     }
-    public void Dash()
+
+    [ServerRpc]
+    public void DashServerRpc()
+    {   
+        PerformDashClientRpc();
+    }
+
+    [ClientRpc]
+    public void PerformDashClientRpc()
     {
-        //UnityEngine.Debug.Log($"[{(IsServer ? "HOST" : "CLIENT")}] Dash called. Current stamina: {currentStamina}");
-        if (currentStamina >= dashCost)
+        EnableDashTrailClientRpc();
+        isDashing = true;
+        if (collisionHandler != null)
         {
-            isDashing = true;
-            if (collisionHandler != null)
-            {
-                collisionHandler.isDashing = true;
-            }
-            currentStamina -= dashCost;
-            staminaBar.UpdateStaminaUI(currentStamina, maxStamina);
-            rb.AddForce(transform.forward * 20f, ForceMode.Impulse);
-            StartCoroutine(ResetDashFlag());
-        }     
+            collisionHandler.isDashing = true;
+        }
+
+        rb.AddForce(transform.forward * 30f, ForceMode.Impulse);
+        StartCoroutine(ResetDashFlag());
+    }
+
+    [ClientRpc]
+    public void EnableDashTrailClientRpc()
+    {
+        dashTrail.gameObject.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void DisableDashTrailClientRpc()
+    {
+        dashTrail.Clear();
+        dashTrail.gameObject.SetActive(false);
     }
 
     private IEnumerator ResetDashFlag()
     {
+        // Let's the collision handler know we're dashing to apply knockback.
         yield return new WaitForSeconds(0.3f);
         isDashing = false;
+        DisableDashTrailClientRpc();
         if (collisionHandler != null)
         {
             collisionHandler.isDashing = false;

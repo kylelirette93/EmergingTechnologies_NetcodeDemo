@@ -2,6 +2,9 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Basic player movement and rotation handler.
+/// </summary>
 public class Mover : NetworkBehaviour
 {
     private Vector2 inputVector;

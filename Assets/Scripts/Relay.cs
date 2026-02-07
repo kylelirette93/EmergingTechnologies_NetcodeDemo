@@ -10,6 +10,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using System.Collections;
+
 public class Relay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI joinCodeText;
@@ -24,6 +25,7 @@ public class Relay : MonoBehaviour
     {
         try
         {
+            // Initialize unity servics and sign in anonymously.
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
@@ -38,25 +40,29 @@ public class Relay : MonoBehaviour
     {
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
         {
-            
-        }
-        int playerCount = NetworkManager.Singleton.ConnectedClients.Count;
-        if (playerCount >= maxPlayerCount)
-        {
-            HideUI();
+            // If max player count is reached hide all UI elements.
+            int playerCount = NetworkManager.Singleton.ConnectedClients.Count;
+            if (playerCount >= maxPlayerCount)
+            {
+                HideUI();
+            }
         }
     }
     public async void StartHost()
     {
         try
         {
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2); // Max 2 players.
+            // Creates space on relay server for 2 players.
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
 
+            // Creates join code clients use to connect to relay server.
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             joinCodeText.text = $"Join Code: {joinCode}";
 
+            // Encrypt connection to server and clients.
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
 
+            // Start host and listen for clients.
             NetworkManager.Singleton.StartHost();
 
             if (joinCodeInput != null) joinCodeInput.gameObject.SetActive(false);
@@ -79,13 +85,17 @@ public class Relay : MonoBehaviour
                 return;
             }
 
+            // Input field string is passed to relay server to find allocation to join.
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
+            // Encrypt connection to server and clients.
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
+            // Start client and connect to relay server.
             NetworkManager.Singleton.StartClient();
 
             joinCodeText.text = $"Joining...";
+            // Once joined, hide ui after delay.
             StartCoroutine(HideUIWithDelay(1f));
         }
         catch (Exception e)

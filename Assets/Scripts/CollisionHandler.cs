@@ -13,11 +13,10 @@ public class CollisionHandler : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        //Debug.Log($"[{(IsServer ? "HOST" : "CLIENT")}] Collision detected. isDashing {isDashing}, collided with: {collision.gameObject.name}");
         if (collision.gameObject.CompareTag("Player") && isDashing)
         {
-            //Debug.Log($"[{(IsServer ? "HOST" : "CLIENT")}] Sending knockback ServerRPC");
             ulong networkObjectId = collision.gameObject.GetComponent<NetworkObject>().NetworkObjectId;
+            // Send a server rpc to handle physics on server for all clients.
             ApplyKnockbackForceServerRpc(networkObjectId);
         }
     }
@@ -25,12 +24,12 @@ public class CollisionHandler : NetworkBehaviour
     [ServerRpc]
     private void ApplyKnockbackForceServerRpc(ulong networkObjectId)
     {
-        //Debug.Log($"[SERVER] ApplyKnockbackForceServerRpc called for object ID: {networkObjectId}");
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject targetObject))
         {
             Vector3 knockbackDirection = targetObject.transform.position - transform.position;
             knockbackDirection.Normalize();
 
+            // Disabling movement to prevent overriding the knockback force.
             targetObject.GetComponent<CollisionHandler>().DisableMovementClientRpc(knockbackDuration);
             targetObject.GetComponent<CollisionHandler>().ApplyKnockbackClientRpc(knockbackDirection, knockbackForce, knockbackDuration);
         }
@@ -39,6 +38,7 @@ public class CollisionHandler : NetworkBehaviour
     [ClientRpc]
     private void DisableMovementClientRpc(float duration)
     {
+        // Disables movement specifically on this client.
         StartCoroutine(DisableMovementCoroutine(duration));
     }
 
@@ -48,6 +48,7 @@ public class CollisionHandler : NetworkBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
+            // Handles knockback force on client side.
             rb.AddForce(direction * force, ForceMode.Impulse);
         }
         StartCoroutine(DisableMovementCoroutine(duration));
@@ -58,6 +59,7 @@ public class CollisionHandler : NetworkBehaviour
         Mover mover = GetComponent<Mover>();
         if (mover != null)
         {
+            // Feedback for knockback, and resets movement after dash duration.
             transform.DOScale(Vector3.one * 1.2f, duration / 2).SetEase(Ease.OutQuad);
             mover.CanMove = false;
             yield return new WaitForSeconds(duration);

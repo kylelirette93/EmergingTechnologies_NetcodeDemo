@@ -1,10 +1,18 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
-using UnityEditor;
 
 public class ClientAuthorityHandler : NetworkBehaviour
 {
+    PlayerInput playerInput;
+    private void Awake()
+    {
+        playerInput = GetComponent<PlayerInput>();
+        if (playerInput != null)
+        {
+            playerInput.enabled = false;
+        }
+    }
     public override void OnNetworkSpawn()  
     {
         Camera sceneCamera = GameObject.FindWithTag("SceneCamera").GetComponent<Camera>();
@@ -14,7 +22,6 @@ public class ClientAuthorityHandler : NetworkBehaviour
         }
         Camera playerCamera = GetComponentInChildren<Camera>();
         AudioListener playerListener = GetComponentInChildren<AudioListener>();
-        PlayerInput playerInput = GetComponent<PlayerInput>();
 
         if (IsOwner)
         {

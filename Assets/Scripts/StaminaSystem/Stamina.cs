@@ -1,7 +1,8 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// Basic stamina class to hold stamina data and retrieve it.
+/// </summary>
 public class Stamina
 {
     [SerializeField] private float maxStamina = 100f;

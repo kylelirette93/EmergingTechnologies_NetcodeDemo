@@ -1,8 +1,10 @@
 using TMPro;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Menu UI handles button interactions for hosting and joining games.
+/// </summary>
 public class MenuUI : MonoBehaviour
 {
     [SerializeField] private Button HostButton;
