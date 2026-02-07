@@ -17,10 +17,14 @@ public class DashController : NetworkBehaviour
     private float dashCost = 30f;
     private bool isDashing = false;
 
+    [SerializeField] AudioClip dashSound;
+    private AudioSource audioSource;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         collisionHandler = GetComponent<CollisionHandler>();
+        audioSource = GetComponentInChildren<AudioSource>();
 
         if (staminaBar == null)
         {
@@ -62,6 +66,7 @@ public class DashController : NetworkBehaviour
     public void PerformDashClientRpc()
     {
         EnableDashTrailClientRpc();
+        audioSource.PlayOneShot(dashSound);
         isDashing = true;
         if (collisionHandler != null)
         {

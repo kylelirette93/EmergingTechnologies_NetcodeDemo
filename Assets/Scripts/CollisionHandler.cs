@@ -8,6 +8,14 @@ public class CollisionHandler : NetworkBehaviour
     float knockbackForce = 15f;
     float knockbackDuration = 0.3f;
     public bool isDashing = false;
+    [SerializeField] ShakeManager shakeManager;
+    [SerializeField] AudioClip impactSound;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponentInChildren<AudioSource>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -50,6 +58,8 @@ public class CollisionHandler : NetworkBehaviour
         {
             // Handles knockback force on client side.
             rb.AddForce(direction * force, ForceMode.Impulse);
+            shakeManager.Shake();
+            audioSource.PlayOneShot(impactSound);
         }
         StartCoroutine(DisableMovementCoroutine(duration));
     }
@@ -60,7 +70,7 @@ public class CollisionHandler : NetworkBehaviour
         if (mover != null)
         {
             // Feedback for knockback, and resets movement after dash duration.
-            transform.DOScale(Vector3.one * 1.2f, duration / 2).SetEase(Ease.OutQuad);
+            transform.DOScale(Vector3.one * 1.5f, duration / 2).SetEase(Ease.OutQuad);
             mover.CanMove = false;
             yield return new WaitForSeconds(duration);
             mover.CanMove = true;
