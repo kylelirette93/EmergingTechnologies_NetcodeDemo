@@ -355,7 +355,7 @@ MonoBehaviour:
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
-  InLocalSpace: 0
+  InLocalSpace: 1
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
@@ -526,6 +526,84 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!1001 &4919096625467178775
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7783360192999566413}
+    m_Modifications:
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908707701810001926, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908707701810001926, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: ColorModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 908707701810001926, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 908707701810001926, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5189694405850616267, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+      propertyPath: m_Name
+      value: StarParticles
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+--- !u!4 &4785491511981462623 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 445116930526178120, guid: 03f61593ffb92e84891c00b380b211c3, type: 3}
+  m_PrefabInstance: {fileID: 4919096625467178775}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7750331737482906534
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -594,6 +672,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5901ba95818f96489263b70c251ea7c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4945952702193226118}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d5901ba95818f96489263b70c251ea7c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4785491511981462623}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d5901ba95818f96489263b70c251ea7c, type: 3}
       insertIndex: -1
@@ -752,7 +833,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!114 &5365916539621550291
 MonoBehaviour:
   m_ObjectHideFlags: 0

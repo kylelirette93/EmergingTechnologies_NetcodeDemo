@@ -3,19 +3,23 @@ using DG.Tweening;
 
 public class ShakeManager : MonoBehaviour
 {
-    Transform originalCamPos;
+    Vector3 originalPos;
+    Quaternion originalRot;
     public void Shake()
     {
         Camera mainCamera = Camera.main;
-        originalCamPos = mainCamera.transform;
+
+        mainCamera.transform.DOKill(true);
+        originalPos = mainCamera.transform.localPosition;
+        originalRot = mainCamera.transform.localRotation;
+
         DOTween.Sequence()
-            .Append(mainCamera.transform.DOShakePosition(0.25f, new Vector3(0.5f, 0.5f, 0), 10, 90, false))
-            .Append(mainCamera.transform.DOShakeRotation(0.25f, new Vector3(0, 0, 10), 10, 90, false))
-            .SetEase(Ease.OutQuad)
+            .Append(mainCamera.transform.DOShakePosition(0.5f, 0.5f))
+            .Join(mainCamera.transform.DOShakeRotation(0.5f, 0.5f))
             .OnComplete(() =>
             {
-                mainCamera.transform.localPosition = originalCamPos.localPosition;
-                mainCamera.transform.localRotation = Quaternion.identity;
+                mainCamera.transform.localPosition = originalPos;
+                mainCamera.transform.localRotation = originalRot;
             });
     }
 }

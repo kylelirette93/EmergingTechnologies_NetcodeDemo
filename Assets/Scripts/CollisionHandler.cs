@@ -11,10 +11,12 @@ public class CollisionHandler : NetworkBehaviour
     [SerializeField] ShakeManager shakeManager;
     [SerializeField] AudioClip impactSound;
     private AudioSource audioSource;
+    private ParticleSystem starParticles;
 
     private void Start()
     {
         audioSource = GetComponentInChildren<AudioSource>();
+        starParticles = GetComponentInChildren<ParticleSystem>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -60,6 +62,7 @@ public class CollisionHandler : NetworkBehaviour
             rb.AddForce(direction * force, ForceMode.Impulse);
             shakeManager.Shake();
             audioSource.PlayOneShot(impactSound);
+            starParticles.Play();
         }
         StartCoroutine(DisableMovementCoroutine(duration));
     }

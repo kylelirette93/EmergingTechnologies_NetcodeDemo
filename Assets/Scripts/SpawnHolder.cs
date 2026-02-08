@@ -6,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class SpawnHolder : NetworkBehaviour
 {
-    public Transform playerASpawn;
-    public Transform playerBSpawn;
+    public Transform spawnPointA;
+    public Transform spawnPointB;
 
     public static SpawnHolder Instance { get; private set; }
 
@@ -23,5 +23,12 @@ public class SpawnHolder : NetworkBehaviour
             Instance = this;
         }
         #endregion
+    }
+
+    public void SwitchSpawnPoints()
+    {
+        Transform temp = spawnPointA;
+        spawnPointA = spawnPointB;
+        spawnPointB = temp;
     }
 }
