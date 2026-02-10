@@ -1,23 +1,29 @@
+using System;
+using System.Collections;
+using System.Net;
+using System.Net.Sockets;
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
-using Unity.Networking.Transport.Relay;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
-using System.Collections;
 
 public class Relay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI joinCodeText;
     [SerializeField] private TMP_InputField joinCodeInput;
+    [SerializeField] private TextMeshProUGUI ipAddressText;
+    [SerializeField] private TMP_InputField ipInputText;
     [SerializeField] private MenuUI menuUI;
     [SerializeField] private Button JoinButton;
     [SerializeField] private Button HostButton;
+    [SerializeField] private Button HostLocalButton;
+    [SerializeField] private Button JoinLocalButton;
 
     const int maxPlayerCount = 2;
 
@@ -104,6 +110,39 @@ public class Relay : MonoBehaviour
         }
     }
 
+    public void LocalHost()
+    {
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.ConnectionData.ServerListenAddress = GetLocalIPv4();
+        ipAddressText.text = GetLocalIPv4();
+        NetworkManager.Singleton.StartHost();
+    }
+
+    public void JoinLocal()
+    {
+        string ip = ipInputText.text;
+
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.ConnectionData.ServerListenAddress = ip;
+
+        NetworkManager.Singleton.StartClient();
+    }
+
+    public string GetLocalIPv4()
+    {
+        // Get all network interfaces
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+
+        foreach (var ip in host.AddressList)
+        {
+            // Filter for IPv4 addresses and ignore loopback (127.0.0.1)
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return ip.ToString();
+            }
+        }
+        return "No IPv4 address found.";
+    }
     private IEnumerator HideUIWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
